@@ -130,7 +130,7 @@ export default class QlogConnection {
 
         for ( const evt of this.events ){
             const category  = this.parseEvent(evt).category;
-            const eventType = this.parseEvent(evt).name;
+            const eventType = this.parseEvent(evt).type;
 
             if ( !this.lookupTable.has(category) ) {
                 this.lookupTable.set( category, new Map<string, Array<IQlogRawEvent>>() );

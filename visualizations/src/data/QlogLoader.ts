@@ -791,6 +791,12 @@ export class EventFieldsParser implements IQlogEventParser {
 
         (this.currentEvent as IQlogRawEvent)[this.nameIndex] = val;
     }
+    public get type():string {
+        return this.name;
+    }
+    public set type(val:string) {
+        this.name = val;
+    }
     public get data():any|undefined {
         if ( this.dataIndex === -1 ) {
             return {};
@@ -991,6 +997,12 @@ export class PreSpecEventParser implements IQlogEventParser {
     }
     public set name(val:string) {
         (this.currentEvent as IQlogRawEvent)[2] = val;
+    }
+    public get type():string {
+        return this.name;
+    }
+    public set type(val:string) {
+        this.name = val;
     }
     public get trigger():string {
         return (this.currentEvent as IQlogRawEvent)[3];

@@ -367,9 +367,31 @@ export class DirectEventParser implements IQlogEventParser {
             return;
         }
 
-        // e.g., "transport:packet_sent" becomed "transport:packet_received" if curName === "packet_sent"
+        // e.g., "transport:packet_sent" becomes "transport:packet_received" if curName === "packet_sent"
         const curName = this.name;
         this.currentEvent.name = this.currentEvent.name.replace( curName, val );
+    }
+
+    // Since these qlogloaders are also used in other projects, let's make it even more confusing...
+    // Draft-02 uses the "name", "category" and "type" fields with "name" being the concatenation of "category" and "type"
+    // Qvis uses the DirectEventParser.name parameter to access what is in actuality the "type" field
+    // The DirectEventParser.type parameter is a quick patch which just redirects to the DirectEventParser.name parameter
+    // This way we can start using "type" in future code and move away from misusing the "name" parameter
+    // See above name() getter and setter for more information
+    // Implementation SHOULD use DirectEventParser.type instead of DirectEventParser.name to get draf-02 "type"
+    public get type():string {
+        // DirectEventParser.name does not look for a "type" field, we will rectify that behaviour in here
+        // We chose to do this here rather than in DirectEventParser.name so we avoid breaking stuff,
+        // yet have support for code written with draft-02 in mind
+        if (this.currentEvent && this.currentEvent.type) {
+            return this.currentEvent.type;
+        }
+
+        return this.name;
+    }
+
+    public set type(val:string) {
+        this.name = val;
     }
 
     public get data():any|undefined {
